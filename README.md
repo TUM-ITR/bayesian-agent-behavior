@@ -42,3 +42,134 @@ The focus of the code is **clarity and reproducibility**, rather than toolbox-st
 │   Plotting and visualization routines
 │
 └── README.md
+```
+EXAMPLE 1: LQ DIFFERENTIAL GAME
+
+File:
+example_LQ_bayes_identification_prediction.m
+
+Description:
+
+This script simulates a two-player continuous-time linear–quadratic
+differential game with reference tracking.
+
+It demonstrates:
+
+Online Bayesian estimation of value-function parameters and diagonal cost
+matrices
+
+Reconstruction of feedback controllers from posterior means
+
+Behaviour prediction:
+
+future state trajectories
+
+future control trajectories
+
+uncertainty propagation via Monte Carlo sampling
+
+Key features:
+
+Linear dynamics with two control channels
+
+Gaussian priors on unknown cost parameters
+
+Recursive Bayesian regression
+
+Posterior-based prediction of closed-loop behaviour
+
+Notes:
+
+The closed-loop ODE is written in terms of the deviation from the reference
+x_dev(t) = x(t) - x_ref(t)
+and this deviation is used implicitly throughout the script.
+
+Cross-control cost terms are set to zero (R12 = R21 = 0).
+
+EXAMPLE 2: NONLINEAR 1D DIFFERENTIAL GAME (PAPER EXAMPLE)
+
+File:
+example_NL_bayes_identification_prediction.m
+
+Description:
+
+This script reproduces the 1D nonlinear two-player differential game used in
+the paper.
+
+The nonlinear dynamics take the form:
+x_dot = f(x) + g1(x) u1 + g2(x) u2
+
+The example mirrors the objectives of the LQ case, while emphasizing conceptual
+clarity.
+
+What this example shows:
+
+Offline computation of a high-order reference solution (ground truth)
+
+Online Bayesian estimation of:
+
+truncated value-function weights
+
+scalar state-cost parameters
+
+Posterior analysis:
+
+parameter convergence
+
+relative estimation errors
+
+uncertainty-aware value-function reconstruction (mean ± 2σ)
+
+Notes:
+
+Although the system is scalar, the formulation is compatible with a matrix
+viewpoint: g1(x) and g2(x) are treated as 1×1 matrices.
+
+Constant factors in the optimal control laws depend on the chosen feature
+normalization and match the paper’s formulation.
+
+REQUIREMENTS
+
+MATLAB (tested with recent versions)
+
+Optimization Toolbox (required for lsqnonlin)
+
+No third-party dependencies
+
+HOW TO RUN
+
+Clone the repository and add it to your MATLAB path.
+
+Run one of the example scripts:
+
+example_LQ_bayes_identification_prediction
+
+or
+
+example_NL_bayes_identification_prediction
+
+Figures will be generated automatically. Plotting can be disabled via flags
+inside the scripts.
+
+INTENDED AUDIENCE
+
+This code is intended for:
+
+readers of the accompanying paper,
+
+researchers working on learning and inference in differential games,
+
+users interested in Bayesian identification and prediction in continuous-time
+control.
+
+The focus is clarity and reproducibility, not toolbox generality.
+
+CITATION
+
+If you use this code in your work, please cite the associated paper:
+
+[ Citation to be added ]
+
+CONTACT
+
+For questions or issues related to the code, please contact the authors.
