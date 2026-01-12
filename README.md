@@ -23,6 +23,8 @@ The focus of the code is **clarity and reproducibility**, rather than toolbox-st
 ---
 
 ## Repository structure
+
+```text
 .
 ├── example_LQ_bayes_identification_prediction.m
 │   Main LQ differential game example
@@ -40,4 +42,3 @@ The focus of the code is **clarity and reproducibility**, rather than toolbox-st
 │   Plotting and visualization routines
 │
 └── README.md
-
