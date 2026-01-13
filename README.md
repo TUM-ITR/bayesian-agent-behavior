@@ -52,8 +52,7 @@ At a feedback Nash equilibrium, the value functions satisfy coupled
 Hamilton–Jacobi–Bellman (HJB) conditions
 
 $$
-0 = Q_i(x) + u_i^\top R_i u_i
-+ \nabla V_i(x)^\top\!\Big(f(x)+g_1(x)u_1+g_2(x)u_2\Big),
+J_i = \int_0^\infty \left( Q_i(x(t)) + u_i(t)^\top R_i\,u_i(t) \right)\,dt
 $$
 
 together with the stationary feedback law
