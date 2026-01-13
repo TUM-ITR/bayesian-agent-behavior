@@ -34,35 +34,52 @@ Bianchin, F., Lefringhausen, R. and Hirche, S., 2026. Online Bayesian Learning o
 ### Mathematical summary (what the code implements)
 
 We consider a two-player continuous-time differential game with dynamics
-\[
+$$
 \dot{x} = f(x) + g_1(x)u_1 + g_2(x)u_2,
-\]
+$$
 and infinite-horizon costs
-\[
-J_i = \int_0^\infty \Big(Q_i(x(t)) + u_i(t)^\top R_i\,u_i(t)\Big)\,dt,\qquad i\in\{1,2\}.
-\]
+$$
+J_i = \int_0^\infty \Big(Q_i(x(t)) + u_i(t)^\top R_i\,u_i(t)\Big)\,dt,
+\qquad i\in\{1,2\}.
+$$
 
-At a feedback Nash equilibrium, the value functions satisfy coupled HJB conditions
-\[
-0 = Q_i(x) + u_i^\top R_i u_i + \nabla V_i(x)^\top\!\Big(f(x)+g_1(x)u_1+g_2(x)u_2\Big),
-\]
-and the stationary feedback structure
-\[
-u_i^\star(x) = -\tfrac{1}{2}\,R_i^{-1}g_i(x)^\top \nabla V_i(x).
-\]
+At a feedback Nash equilibrium, the value functions satisfy coupled
+Hamilton–Jacobi–Bellman (HJB) conditions
+$$
+0 = Q_i(x) + u_i^\top R_i u_i
++ \nabla V_i(x)^\top\!\Big(f(x)+g_1(x)u_1+g_2(x)u_2\Big),
+$$
+together with the stationary feedback law
+$$
+u_i^\star(x)
+= -\tfrac{1}{2}\,R_i^{-1} g_i(x)^\top \nabla V_i(x).
+$$
 
-To obtain a tractable inverse problem, we use differentiable feature maps and linear-in-parameters models
-\[
-V_i(x) \approx W_{V_i}^\top \phi_{V_i}(x),\qquad
-Q_i(x) \approx W_{Q_i}^\top \phi_{Q_i}(x),\qquad
-u_i^\top R_i u_i = W_{R_i}^\top \phi_{R_i}(u_i),
-\]
-which yield a linear regression model at each time step
-\[
-y_i^{(k)} = \Phi_i^{(k)}\,W_i^- + \eta_i^{(k)},\qquad \eta_i^{(k)}\sim\mathcal{N}(0,\Sigma_i).
-\]
-We place a Gaussian prior \(W_i^- \sim \mathcal{N}(m_{0,i},S_{0,i})\), enabling fast online conjugate updates.
-Posterior uncertainty is propagated forward (Monte Carlo) to obtain predictive distributions over trajectories and controls.
+To obtain a tractable inverse problem, we use differentiable feature maps and
+linear-in-parameters approximations
+$$
+V_i(x) \approx W_{V_i}^\top \phi_{V_i}(x), \qquad
+Q_i(x) \approx W_{Q_i}^\top \phi_{Q_i}(x),
+$$
+and note that the quadratic control cost admits an exact linear representation
+$$
+u_i^\top R_i u_i = W_{R_i}^\top \phi_{R_i}(u_i).
+$$
+
+Substituting these expressions into the HJB and feedback conditions yields,
+at each time step, a linear regression model
+$$
+y_i^{(k)} = \Phi_i^{(k)}\,W_i^- + \eta_i^{(k)}, \qquad
+\eta_i^{(k)} \sim \mathcal{N}(0,\Sigma_i),
+$$
+where $W_i^-$ collects the unknown objective parameters up to scale.
+A Gaussian prior $W_i^- \sim \mathcal{N}(m_{0,i}, S_{0,i})$ enables fast
+online conjugate Bayesian updates.
+
+Posterior uncertainty is propagated forward through the induced feedback
+policies using Monte Carlo simulation to obtain predictive distributions
+over future states and control inputs.
+
 
 ---
 
