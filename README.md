@@ -1,7 +1,9 @@
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-<p align="center">
+
+<p align="left">
   <img src="logo.png" width="180">
 </p>
+
 # Bayesian Parameter Identification and Behaviour Prediction in Differential Games 
 
 This repository contains MATLAB code accompanying the paper  
