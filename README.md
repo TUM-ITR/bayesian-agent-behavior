@@ -1,3 +1,5 @@
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)  
+
 # Bayesian Parameter Identification and Behaviour Prediction  
 ## Differential Games (LQ and Nonlinear Examples)
 
@@ -34,9 +36,11 @@ Bianchin, F., Lefringhausen, R. and Hirche, S., 2026. Online Bayesian Learning o
 ### Mathematical summary (what the code implements)
 
 We consider a two-player continuous-time differential game with dynamics
+
 $$
 \dot{x} = f(x) + g_1(x)u_1 + g_2(x)u_2,
 $$
+
 and infinite-horizon costs
 $$
 J_i = \int_0^\infty \Big(Q_i(x(t)) + u_i(t)^\top R_i\,u_i(t)\Big)\,dt,
