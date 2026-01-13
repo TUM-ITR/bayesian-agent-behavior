@@ -1,24 +1,68 @@
 # Bayesian Parameter Identification and Behaviour Prediction  
 ## Differential Games (LQ and Nonlinear Examples)
 
-This repository contains MATLAB code accompanying a research paper on  
-**online Bayesian parameter identification and behaviour prediction in differential games**.
+This repository contains MATLAB code accompanying the paper  
+**Online Bayesian Learning of Agent Behavior in Differential Games**  
+(Francesco Bianchin, Robert Lefringhausen, Sandra Hirche).
 
-We consider two-player, continuous-time differential games and address two main objectives:
+The code implements an online Bayesian, game-theoretic approach to infer and predict
+agent behaviour in multi-agent dynamical systems. The key idea is to cast
+Hamilton–Jacobi–Bellman (HJB) optimality conditions as **linear-in-parameters residuals**,
+enabling fast sequential **conjugate Gaussian updates** and uncertainty-aware prediction
+from limited, noisy observations (without history stacks).
+
+We focus on two main objectives:
 
 1. **Online Bayesian parameter estimation**
-   - Gaussian priors on unknown cost and value-function parameters
-   - Recursive Bayesian regression using noisy online observations
+   - Gaussian priors on unknown objective parameters (value-function and cost terms)
+   - Recursive Bayesian regression using a stream of noisy observations
+   - Compatible with nonlinear dynamics and nonquadratic value functions via basis expansions
 
 2. **Behaviour prediction**
    - Use posterior parameter estimates to predict future state and control trajectories
    - Propagate uncertainty forward via Monte Carlo simulation to obtain predictive distributions
 
 The repository includes:
-- a **linear–quadratic (LQ)** reference-tracking game, and  
-- a **nonlinear 1D** differential game used as a conceptual and numerical illustration in the paper.
+- a **linear–quadratic (LQ)** reference-tracking differential game, and  
+- a **nonlinear 1D** differential game used as a conceptual and numerical illustration.
 
-The focus of the code is **clarity and reproducibility**, rather than toolbox-style generality.
+The focus is **clarity and reproducibility**, rather than toolbox-style generality.
+
+**Citation:**  
+Bianchin, F., Lefringhausen, R. and Hirche, S., 2026. Online Bayesian Learning of Agent Behavior in Differential Games. arXiv preprint arXiv:2601.05087.
+
+### Mathematical summary (what the code implements)
+
+We consider a two-player continuous-time differential game with dynamics
+\[
+\dot{x} = f(x) + g_1(x)u_1 + g_2(x)u_2,
+\]
+and infinite-horizon costs
+\[
+J_i = \int_0^\infty \Big(Q_i(x(t)) + u_i(t)^\top R_i\,u_i(t)\Big)\,dt,\qquad i\in\{1,2\}.
+\]
+
+At a feedback Nash equilibrium, the value functions satisfy coupled HJB conditions
+\[
+0 = Q_i(x) + u_i^\top R_i u_i + \nabla V_i(x)^\top\!\Big(f(x)+g_1(x)u_1+g_2(x)u_2\Big),
+\]
+and the stationary feedback structure
+\[
+u_i^\star(x) = -\tfrac{1}{2}\,R_i^{-1}g_i(x)^\top \nabla V_i(x).
+\]
+
+To obtain a tractable inverse problem, we use differentiable feature maps and linear-in-parameters models
+\[
+V_i(x) \approx W_{V_i}^\top \phi_{V_i}(x),\qquad
+Q_i(x) \approx W_{Q_i}^\top \phi_{Q_i}(x),\qquad
+u_i^\top R_i u_i = W_{R_i}^\top \phi_{R_i}(u_i),
+\]
+which yield a linear regression model at each time step
+\[
+y_i^{(k)} = \Phi_i^{(k)}\,W_i^- + \eta_i^{(k)},\qquad \eta_i^{(k)}\sim\mathcal{N}(0,\Sigma_i).
+\]
+We place a Gaussian prior \(W_i^- \sim \mathcal{N}(m_{0,i},S_{0,i})\), enabling fast online conjugate updates.
+Posterior uncertainty is propagated forward (Monte Carlo) to obtain predictive distributions over trajectories and controls.
 
 ---
 
@@ -43,133 +87,107 @@ The focus of the code is **clarity and reproducibility**, rather than toolbox-st
 │
 └── README.md
 ```
-EXAMPLE 1: LQ DIFFERENTIAL GAME
+## Example 1: LQ differential game
 
-File:
+File:  
 example_LQ_bayes_identification_prediction.m
 
-Description:
+### Description
 
 This script simulates a two-player continuous-time linear–quadratic
 differential game with reference tracking.
 
 It demonstrates:
+- Online Bayesian estimation of value-function parameters and diagonal cost
+  matrices
+- Reconstruction of feedback controllers from posterior means
+- Behaviour prediction:
+  - future state trajectories
+  - future control trajectories
+  - uncertainty propagation via Monte Carlo sampling
 
-Online Bayesian estimation of value-function parameters and diagonal cost
-matrices
+### Notes
 
-Reconstruction of feedback controllers from posterior means
+- The closed-loop ODE is written in terms of the deviation from the reference:
 
-Behaviour prediction:
+      x_dev(t) = x(t) - x_ref(t)
 
-future state trajectories
+  and this deviation is used implicitly throughout the script.
 
-future control trajectories
+- Cross-control cost terms are set to zero (R12 = R21 = 0).
 
-uncertainty propagation via Monte Carlo sampling
+---
 
-Key features:
+## Example 2: Nonlinear 1D differential game (paper example)
 
-Linear dynamics with two control channels
-
-Gaussian priors on unknown cost parameters
-
-Recursive Bayesian regression
-
-Posterior-based prediction of closed-loop behaviour
-
-Notes:
-
-The closed-loop ODE is written in terms of the deviation from the reference
-x_dev(t) = x(t) - x_ref(t)
-and this deviation is used implicitly throughout the script.
-
-Cross-control cost terms are set to zero (R12 = R21 = 0).
-
-EXAMPLE 2: NONLINEAR 1D DIFFERENTIAL GAME (PAPER EXAMPLE)
-
-File:
+File:  
 example_NL_bayes_identification_prediction.m
 
-Description:
+### Description
 
 This script reproduces the 1D nonlinear two-player differential game used in
 the paper.
 
 The nonlinear dynamics take the form:
-x_dot = f(x) + g1(x) u1 + g2(x) u2
+
+      x_dot = f(x) + g1(x) u1 + g2(x) u2
 
 The example mirrors the objectives of the LQ case, while emphasizing conceptual
 clarity.
 
-What this example shows:
+### Notes
 
-Offline computation of a high-order reference solution (ground truth)
+- Although the system is scalar, the formulation is compatible with a matrix
+  viewpoint: g1(x) and g2(x) are treated as 1×1 matrices.
 
-Online Bayesian estimation of:
+- Constant factors in the optimal control laws depend on the chosen feature
+  normalization and match the paper’s formulation.
 
-truncated value-function weights
+---
 
-scalar state-cost parameters
+## Requirements
 
-Posterior analysis:
+- MATLAB (tested with recent versions)
+- Optimization Toolbox (required for lsqnonlin)
+- No third-party dependencies
 
-parameter convergence
+---
 
-relative estimation errors
+## How to run
 
-uncertainty-aware value-function reconstruction (mean ± 2σ)
+1. Clone the repository and add it to your MATLAB path.
+2. Run one of the example scripts:
 
-Notes:
+       example_LQ_bayes_identification_prediction
 
-Although the system is scalar, the formulation is compatible with a matrix
-viewpoint: g1(x) and g2(x) are treated as 1×1 matrices.
+   or
 
-Constant factors in the optimal control laws depend on the chosen feature
-normalization and match the paper’s formulation.
+       example_NL_bayes_identification_prediction
 
-REQUIREMENTS
+3. Figures will be generated automatically. Plotting can be disabled via flags
+   inside the scripts.
 
-MATLAB (tested with recent versions)
+---
 
-Optimization Toolbox (required for lsqnonlin)
-
-No third-party dependencies
-
-HOW TO RUN
-
-Clone the repository and add it to your MATLAB path.
-
-Run one of the example scripts:
-
-example_LQ_bayes_identification_prediction
-
-or
-
-example_NL_bayes_identification_prediction
-
-Figures will be generated automatically. Plotting can be disabled via flags
-inside the scripts.
-
-INTENDED AUDIENCE
+## Intended audience
 
 This code is intended for:
-
-readers of the accompanying paper,
-
-researchers working on learning and inference in differential games,
-
-users interested in Bayesian identification and prediction in continuous-time
-control.
+- readers of the accompanying paper,
+- researchers working on learning and inference in differential games,
+- users interested in Bayesian identification and prediction in continuous-time
+  control.
 
 The focus is clarity and reproducibility, not toolbox generality.
 
-CITATION
+---
+
+## Citation
 
 If you use this code in your work, please cite the associated paper:
 
-[ Citation to be added ]
+Bianchin, F., Lefringhausen, R. and Hirche, S., 2026. Online Bayesian Learning of Agent Behavior in Differential Games. arXiv preprint arXiv:2601.05087.
+---
 
-CONTACT
+## Contact
 
-For questions or issues related to the code, please contact the authors.
+For questions or issues related to the code, please contact the authors: francesco.bianchin@tum.de
