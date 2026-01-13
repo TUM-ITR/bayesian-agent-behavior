@@ -1,7 +1,6 @@
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
-# Bayesian Parameter Identification and Behaviour Prediction  
-## Differential Games (LQ and Nonlinear Examples)
+# Bayesian Parameter Identification and Behaviour Prediction in Differential Games 
 
 This repository contains MATLAB code accompanying the paper  
 **Online Bayesian Learning of Agent Behavior in Differential Games**  
