@@ -1,83 +1,90 @@
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)  
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
 # Bayesian Parameter Identification and Behaviour Prediction  
 ## Differential Games (LQ and Nonlinear Examples)
 
 This repository contains MATLAB code accompanying the paper  
 **Online Bayesian Learning of Agent Behavior in Differential Games**  
-(Francesco Bianchin, Robert Lefringhausen, Sandra Hirche).
+by *Francesco Bianchin, Robert Lefringhausen, Sandra Hirche*.
 
-The code implements an online Bayesian, game-theoretic approach to infer and predict
-agent behaviour in multi-agent dynamical systems. The key idea is to cast
-Hamilton–Jacobi–Bellman (HJB) optimality conditions as **linear-in-parameters residuals**,
-enabling fast sequential **conjugate Gaussian updates** and uncertainty-aware prediction
-from limited, noisy observations (without history stacks).
+The code implements an online Bayesian, game-theoretic approach to **infer and
+predict agent behaviour** in multi-agent dynamical systems.  
+The key idea is to cast Hamilton–Jacobi–Bellman (HJB) optimality conditions as
+**linear-in-parameters residuals**, enabling fast sequential **conjugate Gaussian
+updates** and uncertainty-aware prediction from limited, noisy observations
+(without history stacks).
 
-We focus on two main objectives:
+---
+
+## Scope and objectives
+
+We consider two-player, continuous-time differential games and address two
+main objectives:
 
 1. **Online Bayesian parameter estimation**
    - Gaussian priors on unknown objective parameters (value-function and cost terms)
    - Recursive Bayesian regression using a stream of noisy observations
-   - Compatible with nonlinear dynamics and nonquadratic value functions via basis expansions
+   - Applicable to nonlinear dynamics and nonquadratic value functions via
+     differentiable basis expansions
 
 2. **Behaviour prediction**
    - Use posterior parameter estimates to predict future state and control trajectories
-   - Propagate uncertainty forward via Monte Carlo simulation to obtain predictive distributions
+   - Propagate uncertainty forward via Monte Carlo simulation to obtain predictive
+     distributions
 
 The repository includes:
 - a **linear–quadratic (LQ)** reference-tracking differential game, and  
-- a **nonlinear 1D** differential game used as a conceptual and numerical illustration.
+- a **nonlinear 1D** differential game used as a conceptual and numerical illustration
+  in the paper.
 
 The focus is **clarity and reproducibility**, rather than toolbox-style generality.
 
-**Citation:**  
-Bianchin, F., Lefringhausen, R. and Hirche, S., 2026. Online Bayesian Learning of Agent Behavior in Differential Games. arXiv preprint arXiv:2601.05087.
+**Citation**  
+Bianchin, F., Lefringhausen, R. and Hirche, S., 2026. *Online Bayesian Learning of
+Agent Behavior in Differential Games*. arXiv preprint arXiv:2601.05087.
 
-### Mathematical summary (what the code implements)
+---
+
+## Mathematical summary (what the code implements)
 
 We consider a two-player continuous-time differential game with dynamics
 
 $$
-\dot{x} = f(x) + g_1(x)u_1 + g_2(x)u_2,
+\dot{x} = f(x) + g_1(x)u_1 + g_2(x)u_2 ,
 $$
 
-and infinite-horizon costs
+and infinite-horizon cost functionals
 
 $$
-J_i = \int_0^\infty \Big(Q_i(x(t)) + u_i(t)^\top R_i\,u_i(t)\Big)\,dt,
-\qquad i\in\{1,2\}.
+J_i = \int_0^\infty \left( Q_i(x(t)) + u_i(t)^\top R_i\,u_i(t) \right)\,dt,
+\qquad i = 1,2 .
 $$
 
 At a feedback Nash equilibrium, the value functions satisfy coupled
-Hamilton–Jacobi–Bellman (HJB) conditions
-
-$$
-J_i = \int_0^\infty \left( Q_i(x(t)) + u_i(t)^\top R_i\,u_i(t) \right)\,dt
-$$
-
-together with the stationary feedback law
+Hamilton–Jacobi–Bellman optimality conditions together with the stationary
+feedback laws
 
 $$
 u_i^\star(x)
-= -\tfrac{1}{2}\,R_i^{-1} g_i(x)^\top \nabla V_i(x).
+= -\tfrac{1}{2}\,R_i^{-1} g_i(x)^\top \nabla V_i(x) .
 $$
 
-To obtain a tractable inverse problem, we use differentiable feature maps and
-linear-in-parameters approximations
+To obtain a tractable inverse problem, the unknown objectives are approximated
+using differentiable feature maps,
 
 $$
 V_i(x) \approx W_{V_i}^\top \phi_{V_i}(x), \qquad
 Q_i(x) \approx W_{Q_i}^\top \phi_{Q_i}(x),
 $$
 
-and note that the quadratic control cost admits an exact linear representation
+while the quadratic control cost admits an exact linear representation
 
 $$
 u_i^\top R_i u_i = W_{R_i}^\top \phi_{R_i}(u_i).
 $$
 
-Substituting these expressions into the HJB and feedback conditions yields,
-at each time step, a linear regression model
+Substituting these representations into the HJB and feedback conditions yields,
+at each time step, a **linear regression model**
 
 $$
 y_i^{(k)} = \Phi_i^{(k)}\,W_i^- + \eta_i^{(k)}, \qquad
@@ -86,12 +93,11 @@ $$
 
 where $W_i^-$ collects the unknown objective parameters up to scale.
 A Gaussian prior $W_i^- \sim \mathcal{N}(m_{0,i}, S_{0,i})$ enables fast
-online conjugate Bayesian updates.
+**online conjugate Bayesian updates**.
 
 Posterior uncertainty is propagated forward through the induced feedback
-policies using Monte Carlo simulation to obtain predictive distributions
-over future states and control inputs.
-
+policies using Monte Carlo simulation to obtain predictive distributions over
+future states and control inputs.
 
 ---
 
@@ -116,6 +122,7 @@ over future states and control inputs.
 │
 └── README.md
 ```
+
 ## Example 1: LQ differential game
 
 File:  
@@ -147,7 +154,7 @@ It demonstrates:
 
 ---
 
-## Example 2: Nonlinear 1D differential game (paper example)
+## Example 2: Nonlinear 1D differential game
 
 File:  
 example_NL_bayes_identification_prediction.m
@@ -160,17 +167,6 @@ the paper.
 The nonlinear dynamics take the form:
 
       x_dot = f(x) + g1(x) u1 + g2(x) u2
-
-The example mirrors the objectives of the LQ case, while emphasizing conceptual
-clarity.
-
-### Notes
-
-- Although the system is scalar, the formulation is compatible with a matrix
-  viewpoint: g1(x) and g2(x) are treated as 1×1 matrices.
-
-- Constant factors in the optimal control laws depend on the chosen feature
-  normalization and match the paper’s formulation.
 
 ---
 
