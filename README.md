@@ -1,7 +1,7 @@
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
-<p align="left">
-  <img src="logo.png" width="180">
+<p align="center">
+  <img src="logo.png" width="360">
 </p>
 
 # Bayesian Parameter Identification and Behaviour Prediction in Differential Games 
