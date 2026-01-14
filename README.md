@@ -112,7 +112,7 @@ future states and control inputs.
 │   Main LQ differential game example
 │
 ├── example_NL_bayes_identification_prediction.m
-│   1D nonlinear differential game example (paper example)
+│   1D nonlinear differential game example
 │
 ├── core/
 │   Core algorithms (Riccati solvers, value-function computation, etc.)
