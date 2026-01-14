@@ -174,6 +174,7 @@ The nonlinear dynamics take the form:
 $$
 \dot{x} = f(x) + g_1(x) u_1 + g_2(x) u_2
 $$
+
 ---
 
 ## Requirements
@@ -217,6 +218,7 @@ The focus is clarity and reproducibility, not toolbox generality.
 If you use this code in your work, please cite the associated paper:
 
 Bianchin, F., Lefringhausen, R. and Hirche, S., 2026. Online Bayesian Learning of Agent Behavior in Differential Games. arXiv preprint arXiv:2601.05087.
+
 ---
 
 ## Contact
