@@ -149,7 +149,9 @@ It demonstrates:
 
 - The closed-loop ODE is written in terms of the deviation from the reference:
 
-      x_dev(t) = x(t) - x_ref(t)
+$$
+x_{dev}(t) = x(t) - x_{ref}(t)
+$$
 
   and this deviation is used implicitly throughout the script.
 
@@ -169,8 +171,9 @@ the paper.
 
 The nonlinear dynamics take the form:
 
-      x_dot = f(x) + g1(x) u1 + g2(x) u2
-
+$$
+\dot{x} = f(x) + g_1(x) u_1 + g_2(x) u_2
+$$
 ---
 
 ## Requirements
