@@ -7,8 +7,7 @@
 # Bayesian Parameter Identification and Behaviour Prediction in Differential Games 
 
 This repository contains MATLAB code accompanying the paper  
-**Online Bayesian Learning of Agent Behavior in Differential Games**  
-by *Francesco Bianchin, Robert Lefringhausen, Sandra Hirche*.
+**Online Bayesian Learning of Agent Behavior in Differential Games** by *Francesco Bianchin, Robert Lefringhausen, Sandra Hirche*.
 
 The code implements an online Bayesian, game-theoretic approach to **infer and
 predict agent behaviour** in multi-agent dynamical systems.  
@@ -179,8 +178,10 @@ $$
 
 ## Requirements
 
-- MATLAB (tested with recent versions)
+- MATLAB (tested with 2025b version)
+- Control System Toolbox
 - Optimization Toolbox (required for lsqnonlin)
+- Statistics and Machine Learning Toolbox
 - No third-party dependencies
 
 ---
