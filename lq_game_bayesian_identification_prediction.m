@@ -268,11 +268,9 @@ display_summary(A, B1, B2, Q1_mu, Q1_sig, Q2_mu, Q2_sig, R11_mu, R11_sig, ...
                 K1_true, K1_nom, K2_true, K2_nom);
 
 %% ============================================================
-%  11. VISUALIZATION (deterministic order)
+%  11. VISUALIZATION
 % ============================================================
 % The figure order is fixed by the ordering of calls below.
-% If you want deterministic filenames for paper figures, consider adding:
-%   exportgraphics(gcf, fullfile('figures','Fig01_states.pdf'), 'ContentType','vector');
 
 n_steps = size(theta_evolution_player1,1);
 
